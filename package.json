@@ -1,0 +1,16 @@
+{
+  "name": "daffy",
+  "version": "0.1.0",
+  "description": "DAta Feeder For You: a simple data row server",
+  "main": "daffy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "andras kemeny",
+  "license": "MIT",
+  "dependencies": {
+    "command-line-args": "^5.0.2",
+    "command-line-usage": "^5.0.5",
+    "csv-parse": "^4.10.1"
+  }
+}
