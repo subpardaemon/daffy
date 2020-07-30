@@ -9,7 +9,7 @@ function usage() {
 }
 
 const opts_def = [
-	{ name: 'file', type: String, alias: 'f', defaultOption: true, defaultValue: '', description: 'The CSV/JSON file to send', typeLabel: '<path>' },
+	{ name: 'file', type: String, alias: 'f', defaultValue: '', description: 'The CSV/JSON file to send', typeLabel: '<path>' },
 	{ name: 'repeats', type: Number, alias: 'r', defaultValue: 1, description: 'Number of times the dataset can be reused', typeLabel: '<n>' },
 	{ name: 'id', type: String, alias: 'i', defaultOption: true, defaultValue: '?', description: 'The dataset ID to use', typeLabel: '<id>' },
 	{ name: 'host', type: String, alias: 'H', defaultValue: 'localhost', description: 'Hostname of the daffy server', typeLabel: '<hostname>' },
