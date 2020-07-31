@@ -4,22 +4,10 @@ const http = require("http");
 const csvparse = require('csv-parse/lib/sync');
 const fs = require("fs");
 
-function usage() {
-	const usage = commandLineUsage([
-		{ header: 'daffy.js', content: 'A simple data queue server.' },
-		{ header: 'Options', optionList: opts_def },
-		{ header: 'Operations', content: "You may communicate with the server on these paths:\n\n  /next?<ID> : fetch the next item in dataset <ID>\n  /list : lists the current datasets, their count, repeat and current index\n  /upload?<ID>&<repeat> : upload a new dataset" },
-		{ header: 'Uploading', content: "* you need to POST to /upload?<ID>&<repeat>;\n* you need to specify either text/csv or application/json as Content-Type;\n* CSV files may use , or ; as delimiter;\n* CSV files must use the first line for column names;\n* JSON files must use an array as the outermost container;\n* you must not encode upload other than current CSV or JSON encoding." }
-	]);
-	console.log(usage);
-	process.exit(0);
-}
-
-
 const port = process.env.DAFFY_PORT || 8033;
 
 const s = {
-	data: {},
+  data: {},
 	pointers: {},
 	counts: {},
 	http: null,
