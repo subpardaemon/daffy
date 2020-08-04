@@ -4,7 +4,12 @@ const http = require("http");
 const csvparse = require('csv-parse/lib/sync');
 const fs = require("fs");
 
-const port = process.env.DAFFY_PORT || 8033;
+const port = parseInt(process.env.DAFFY_PORT || 8033);
+if (!port) port = 8033;
+if (process.env.DAFFY_PORT) {
+  console.log("Listen port overridden to " + process.env.DAFFY_PORT);
+}
+const indexPage = fs.readFileSync('./index.html', { encoding: 'utf8' });
 
 const s = {
   data: {},
@@ -13,14 +18,24 @@ const s = {
 	http: null,
 	init: function () {
 		s.http = http.createServer();
-		s.http.listen(port);
+		s.http.listen(port, undefined);
 		s.http.on('error', function (err) {
 			console.error(err);
 		}.bind(this));
 		s.http.on('request', function (req, resp) {
-			const parts = req.url.substr(1).split('/');
+      console.log(req.method + ' ' + req.url);
+      // s.http.getConnections((e,c)=> {
+      //   if (!e) console.log('connections: ' + c.toString());
+      // });
+      const parts = req.url.substr(1).split('/');
 			if (req.method === 'GET') {
-				if (parts[0] === 'list') {
+        if (req.url === '/' || req.url === '/index.html') {
+          s.send_raw(resp, indexPage);
+        }
+        else if (parts[0] === 'ping') {
+          s.send_json(resp, "pong");
+        }
+				else if (parts[0] === 'list') {
 					const out = {
 						datasets: []
 					};
@@ -70,7 +85,7 @@ const s = {
 					}
 				}
 				else {
-					s.send_failure(resp, "Unknown command", 404);
+					s.send_failure(resp, "Unknown command", 400);
 				}
 			}
 			else if (req.method === 'POST' || req.method === 'PUT') {
@@ -107,14 +122,14 @@ const s = {
 								id: id,
 								items: s.data[id].length,
 								repeat: counts
-							});
+							}, 201);
 						}
 						catch (e) {
-							s.send_failure(resp, "Incorrect request (parse failed)", 405);
+							s.send_failure(resp, "Incorrect request (parse failed)", 400);
 							console.error('Parse error:', e);
 						}
 					}).on('error', function () {
-						s.send_failure(resp, "Incorrect request", 405);
+						s.send_failure(resp, "Incorrect request", 400);
 					});
 				}
 			}
@@ -162,12 +177,21 @@ const s = {
 		resp.writeHead(code, reason);
 		resp.end();
 	},
-	send_success: function (resp, message) {
-		resp.writeHead(202, { 'Content-Type': 'text/plain' });
-		resp.end(message);
+	send_raw: function (resp, data, contentType, code) {
+		if (typeof code === 'undefined') {
+			code = 200;
+    }
+    if (typeof contentType === 'undefined') {
+      contentType = 'text/html; charset=UTF-8';
+    }
+		resp.writeHead(code, { 'Content-Type': contentType });
+		resp.end(data);
 	},
-	send_json: function (resp, data) {
-		resp.setHeader('Content-Type', 'application/json');
+	send_json: function (resp, data, code) {
+		if (typeof code === 'undefined') {
+			code = 200;
+		}
+		resp.writeHead(code, { 'Content-Type': 'application/json' });
 		resp.end(JSON.stringify(data));
 	}
 };

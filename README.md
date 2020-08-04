@@ -11,6 +11,20 @@ each subsequent GET /next calls - that is, until the data set runs out.
 
 You can have as many separate data sets in DAFFY as you wish, but bear in mind that DAFFY keeps everything in memory.
 
+## Installation
+
+### Local
+
+`npm i && DAFFY_PORT=<your port> node ./daffy.js`
+
+If you omit `DAFFY_PORT` the default is 8033.
+
+### Docker
+
+Use `subpardaemon/daffy:latest` in your docker-compose file, and if the
+default 8033 port does not suit you, make sure you set the `DAFFY_PORT`
+envvar to a value of your preference.
+
 ## Usage
 
 Whenever a dataset ID is used, it must match this regex: `/^[a-zA-Z0-9_:,-]+$/`.
@@ -38,7 +52,19 @@ uploading a new dataset.
 
 If the upload was a success, it retuns a small JSON object with statistics data.
 
+### `GET /`
+
+Loads an index page. This will soon be replaced with a crude admin
+interface to upload data sets and check the current state of affairs
+within Daffy.
+
+### `GET /ping`
+
+Healthcheck endpoint.
+
 ## Roadmap
 
+- Human user interface defined in index.html
+- Healthcheck in Docker
 - Maybe an XML input/output vartiant would be nice. Maybe. Does anyone still use XML out there? Hello?
 - Maybe an asynchronous upload?

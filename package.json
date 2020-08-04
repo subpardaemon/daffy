@@ -4,10 +4,19 @@
   "description": "DAta Feeder For You: a simple data row server",
   "main": "daffy.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "author": "andras kemeny",
   "license": "MIT",
+  "homepage": "",
+  "bugs": {
+    "url": "https://github.com/subpardaemon/daffy/issues",
+    "email": "subpardaemon@gmail.com"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/subpardaemon/daffy.git"
+  },
   "dependencies": {
     "command-line-args": "^5.0.2",
     "command-line-usage": "^5.0.5",
